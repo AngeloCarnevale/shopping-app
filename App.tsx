@@ -1,14 +1,33 @@
-import { SafeAreaView, StatusBar } from "react-native";
 import "./src/styles/global.css";
-import Routes from "./src/routes";
-import ProductsContainer from "./src/components/ProductsContainer";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import DetailsScreen from "./src/screens/DetailsScreen";
+import TabNavigator from "./src/navigators/TabNavigator";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./src/services/queryClient";
 
 function App(): React.JSX.Element {
+  const Stack = createNativeStackNavigator();
   return (
-    <SafeAreaView className="flex-1">
-      <Routes />
-      <StatusBar barStyle={"light-content"} />
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient  }>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Tab"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen
+            name="Details"
+            component={DetailsScreen}
+            options={{ animation: "slide_from_bottom" }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Tab"
+            component={TabNavigator}
+            options={{ animation: "slide_from_bottom" }}
+          ></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 
